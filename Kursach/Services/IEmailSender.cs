@@ -3,39 +3,60 @@ using Microsoft.Extensions.Options;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Hosting;
+using MailKit.Net.Smtp;
+using MimeKit;
+using System;
 
 namespace Kursach.Services
 {
-    public class EmailSender : IEmailSender
+    public interface IMailer
     {
-        public EmailSender(IOptions<AuthMessageSenderOptions> optionsAccessor)
+        Task SendEmailAsync(string email, string subject, string body);
+    }
+    public class Mailer: IMailer
+    {
+        private readonly SmtpSettings _smtpSettings;
+        private readonly IWebHostEnvironment _env;
+        public Mailer(IOptions<SmtpSettings> smtpSettings, IWebHostEnvironment env)
         {
-            Options = optionsAccessor.Value;
+            _smtpSettings = smtpSettings.Value;
+            _env = env;
         }
 
-        public AuthMessageSenderOptions Options { get; } //set only via Secret Manager
-        public Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string body)
         {
-            return Execute(Options.SendGridKey, subject, message, email);
-        }
-
-        public Task Execute(string apiKey, string subject, string message, string email)
-        {
-            var client = new SendGridClient(apiKey);
-            var msg = new SendGridMessage()
+            try
             {
-                From = new EmailAddress("gchebodang@gmail.com", Options.SendGridUser),
-                Subject = subject,
-                PlainTextContent = message,
-                HtmlContent = message
-            };
-            msg.AddTo(new EmailAddress(email));
-
-            // Disable click tracking.
-            // See https://sendgrid.com/docs/User_Guide/Settings/tracking.html
-            msg.SetClickTracking(false, false);
-
-            return client.SendEmailAsync(msg);
+                var message = new MimeMessage();
+                message.From.Add(new MailboxAddress(_smtpSettings.SenderName, _smtpSettings.SenderEmail));
+                message.To.Add( MailboxAddress.Parse(email));
+                message.Subject = subject;
+                message.Body = new TextPart("html")
+                {
+                    Text = body
+                };
+                using (var client = new SmtpClient())
+                {
+                    client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                    if (_env.IsDevelopment())
+                    {
+                        await client.ConnectAsync(_smtpSettings.Username,_smtpSettings.Port, true);
+                    }
+                    else
+                    {
+                        await client.ConnectAsync(_smtpSettings.Server);
+                    }
+                    await client.AuthenticateAsync(_smtpSettings.Username, _smtpSettings.Password);
+                    await client.SendAsync(message);
+                    await client.DisconnectAsync(true);
+                }
+            }
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(e.Message);
+            }
         }
     }
 }

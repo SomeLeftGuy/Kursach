@@ -1,8 +1,25 @@
-﻿@{
+﻿@model IEnumerable<Kursach.Models.Fanfic>;
+@{
+   
     ViewData["Title"] = "FanficMenu";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
 }
-<div class="text-center">
+<tr class="text-center">
     <h3 class="display-4">Menu</h3>
     <h5>There are some tags for you UwU</h5>
-</div>
+    @{
+        using (ApplicationContext db = new ApplicationContext())
+        {
+            <h4>Список фанфиков</h4>
+            foreach (Kursach.Models.Fanfic f in db.Set<Fanfic>())
+            {
+                    <td>@f.ID</td>
+                    <td>@f.Name</td>
+                    <td>@f.Tags</td>
+                    <td>@f.Text</td>
+                
+            }
+        }
+    }
+</tr>

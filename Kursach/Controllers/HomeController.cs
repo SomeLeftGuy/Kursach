@@ -6,16 +6,20 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Kursach.Models;
+using Kursach.Services;
 
 namespace Kursach.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMailer _mailer;
+        ApplicationContext db = new ApplicationContext();
 
-        public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger, IMailer mailer)
         {
             _logger = logger;
+            _mailer = mailer;
         }
         public IActionResult FanficMenu()
         {
@@ -23,7 +27,7 @@ namespace Kursach.Controllers
         }
         public IActionResult Index()
         {
-            return View();
+           return View(db.Fanfics);
         }
 
         public IActionResult Privacy()
