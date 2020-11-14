@@ -14,6 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Kursach.Services;
+using CoursesMain;
+
 namespace Kursach
 {
     public class Startup
@@ -36,7 +38,7 @@ namespace Kursach
             services.AddControllersWithViews();
             services.AddRazorPages();
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
-            services.AddSingleton<IMailer, Mailer>();
+            services.AddSingleton<EmailService>();
         }
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -7,16 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Kursach.Models;
 using Kursach.Services;
+using CoursesMain;
 
 namespace Kursach.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IMailer _mailer;
+        private readonly EmailService _mailer;
         ApplicationContext db = new ApplicationContext();
 
-    public HomeController(ILogger<HomeController> logger, IMailer mailer)
+    public HomeController(ILogger<HomeController> logger, EmailService mailer)
         {
             _logger = logger;
             _mailer = mailer;
