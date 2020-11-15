@@ -5,16 +5,16 @@ namespace Kursach.Models
 {
     public class Fanfic
     {
-        public int ID { get; set; }
-        public string Tags { get; set; }
-        public string Name { get; set; }
-        public string Text { get; set; }
+        public int id { get; set; }
+        public string tags { get; set; }
+        public string name { get; set; }
+        public string text { get; set; }
         public string userId { get; set; }
+        public string endDate { get; set; }
+        public string createDate { get; set; }
+        public string image { get; set; }
         public User user { get; set; }
     }
-    public class ApplicationContext : DbContext
-    {
-        public DbSet<Fanfic> Fanfics { get; set; }
-    }
+ 
 
 }

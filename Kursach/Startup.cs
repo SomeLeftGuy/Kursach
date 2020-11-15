@@ -2,19 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Kursach.Controllers;
+using Kursach.Filters;
+using Kursach.Models;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Kursach.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Kursach.Services;
-using CoursesMain;
 
 namespace Kursach
 {
@@ -24,50 +22,55 @@ namespace Kursach
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
-            services.AddRazorPages();   
-           // services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
-            services.AddSingleton<EmailService>();
+            //services.AddAuthentication()
+            // .AddFacebook(facebookOptions =>
+            //{
+            //facebookOptions.AppId = "383083749274356";
+            //  facebookOptions.AppSecret = "0336b92886a9c424ba8be4ee6107373c";
+            // })
+            //.AddMicrosoftAccount(microsoftOptions =>
+            //  {
+            //    microsoftOptions.ClientId = "75f77783-3fd8-4ee7-a778-6dff6a86a966";
+            //  microsoftOptions.ClientSecret = "V5UxIPjpJZPbs9A2Ytt0FRmi.DXvX@:@";
+            // });
+           MvcOptions switches = new MvcOptions
+           {
+                EnableEndpointRouting = false
+            };
+            services.AddDbContext<ApplicationContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            
+            services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationContext>()
+                .AddDefaultTokenProviders();
+            //.AddDefaultUI(UIFramework.Bootstrap4);
+            services.AddSignalR();
+            services.AddMvc();
         }
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
             }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+            //MvcOptions.EnableEndpointRouting = false;
             app.UseHttpsRedirection();
             app.UseStaticFiles();
-
-            app.UseRouting();
-
             app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
+            app.UseCookiePolicy();
+           app.UseSignalR(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapHub<CommentsHub>("/Comments");
+            });
+
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-                endpoints.MapRazorPages();
+                   template: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }
