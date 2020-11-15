@@ -12,7 +12,6 @@ namespace CoursesMain
         public async Task SendEmailAsync(string email, string subject, string message)
         {
             var emailMessage = new MimeMessage();
-
             emailMessage.From.Add(new MailboxAddress("Site Administration", "gchebodang@gmail.com"));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
@@ -20,7 +19,6 @@ namespace CoursesMain
             {
                 Text = message
             };
-
             using (var client = new SmtpClient())
             {
                 await client.ConnectAsync("smtp.gmail.com", 25, false);

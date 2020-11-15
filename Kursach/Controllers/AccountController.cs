@@ -1,7 +1,6 @@
 ﻿using CoursesMain;
 using Kursach.Models;
 using Kursach.ModelViews;
-using Kursach.ViewModels;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
