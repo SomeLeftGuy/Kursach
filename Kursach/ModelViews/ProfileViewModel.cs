@@ -10,7 +10,7 @@ namespace Kursach.ModelViews
         public bool accessType { get; set; }
 
         public FanficView[] fanfics { get; set; }
-        public AchivesView[] bonuses { get; set; }
+       // public AchivesView[] bonuses { get; set; }
         public int removeAchivesID { get; set; }
     }
     public class FanficView
@@ -19,8 +19,8 @@ namespace Kursach.ModelViews
         public string name { get; set; }
         public string createDate { get; set; }
         public string endDate { get; set; }
-        public string sum { get; set; }
-        public string colectedSum { get; set; }
+        public string requiredCh { get; set; }
+        public string endedCh { get; set; }
         public bool selected { get; set; }
     }
 }
