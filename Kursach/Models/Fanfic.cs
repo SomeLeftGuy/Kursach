@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-
+using System;
 
 namespace Kursach.Models
 {
@@ -10,11 +10,11 @@ namespace Kursach.Models
         public string name { get; set; }
         public string text { get; set; }
         public string userId { get; set; }
-        public string endDate { get; set; }
+        public DateTime endDate { get; set; }
         public string createDate { get; set; }
         public string requiredCh { get; set; }
         public string endedCh { get; set; }
-        public string image { get; set; }
+        public object image { get; set; }
         public User user { get; set; }
     }
  

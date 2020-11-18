@@ -31,12 +31,13 @@ namespace Kursach.Controllers
             HomeView[] refs;
             if (filter == null)
             {
-                refs = _db.Fanfics.Where(item => Convert.ToDateTime(item.endDate) > DateTime.Now).Select(item => new HomeView
+                refs = _db.Fanfics.Where(item =>item.endDate > DateTime.Now).Select(item => new HomeView
                 {
+                    
                     Ref = item.id,
                     EndDate = Convert.ToDateTime(item.endDate),
-                    //CollectedSum = item.colectedSum,
-                    //Sum = item.sum,
+                    endedCh = item.endedCh,
+                    requiredCh = item.requiredCh,
                     Image = item.image,
                     Name = item.name
                 }).ToArray();
@@ -56,18 +57,18 @@ namespace Kursach.Controllers
                     }
                 }
                 Tag[] tags = new Tag[tagsString.Length];
-                List<HomeView> companies = new List<HomeView>();
+                List<HomeView> fanfics = new List<HomeView>();
                 for (int i = 0; i < tags.Length; i++)
                 {
                     tags[i] = _db.Tag.FirstOrDefault(item => item.name == tagsString[i]);
                     if (tags[i] != null)
                     {
-                        companies.AddRange(_db.TagsToFanfics.Where(item => item.tag == tags[i] && Convert.ToDateTime(item.Fanfic.endDate) > DateTime.Now).Select(item => new HomeView
+                        fanfics.AddRange(_db.TagsToFanfics.Where(item => item.tag == tags[i] && item.Fanfic.endDate > DateTime.Now).Select(item => new HomeView
                         {
                             Ref = item.Fanfic.id,
                             EndDate = Convert.ToDateTime(item.Fanfic.endDate),
-                           // CollectedSum = item.Fanfic.colectedSum,
-                           // Sum = item.Fanfic.sum,
+                            endedCh = item.Fanfic.endedCh,
+                            requiredCh = item.Fanfic.requiredCh,
                             Image = item.Fanfic.image,
                             Name = item.Fanfic.name,
                             Rating = 0
@@ -75,12 +76,12 @@ namespace Kursach.Controllers
                     }
                 }
                 List<HomeView> result = new List<HomeView>();
-                for (int i = 0; i < companies.Count; i++)
+                for (int i = 0; i < fanfics.Count; i++)
                 {
                     bool duplicate = false;
                     for (int z = 0; z < i; z++)
                     {
-                        if (companies[z].Ref == companies[i].Ref)
+                        if (fanfics[z].Ref == fanfics[i].Ref)
                         {
                             duplicate = true;
                             break;
@@ -88,7 +89,7 @@ namespace Kursach.Controllers
                     }
                     if (!duplicate)
                     {
-                        result.Add(companies[i]);
+                        result.Add(fanfics[i]);
                     }
                 }
                 refs = result.ToArray();

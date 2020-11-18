@@ -114,7 +114,7 @@ namespace Kursach.Controllers
                             else
                                 ModelState.AddModelError("", "Incorrect login or password");
                         }
-                        else
+                       else
                         {
                             ModelState.AddModelError("", "You account is blocked");
                         }

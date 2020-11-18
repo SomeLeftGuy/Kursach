@@ -36,10 +36,10 @@ namespace Kursach
             //    microsoftOptions.ClientId = "75f77783-3fd8-4ee7-a778-6dff6a86a966";
             //  microsoftOptions.ClientSecret = "V5UxIPjpJZPbs9A2Ytt0FRmi.DXvX@:@";
             // });
-           MvcOptions switches = new MvcOptions
-           {
-                EnableEndpointRouting = false
-            };
+            services.AddControllersWithViews(mvcOtions =>
+            {
+                mvcOtions.EnableEndpointRouting = false;
+            });
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             
@@ -65,7 +65,6 @@ namespace Kursach
             {
                 routes.MapHub<CommentsHub>("/Comments");
             });
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

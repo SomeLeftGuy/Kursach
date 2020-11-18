@@ -11,10 +11,17 @@ namespace Kursach.ModelViews
         [Required]
         public int id { get; set; }
         [Required]
-        public string Name { get; set; }
+        public string FanficName { get; set; }
         [Required]
-        public string Text { get; set; }
+        public string Theme { get; set; }
+        public string[] Themes { get; set; }
         public string Tags { get; set; }
-     
+        public string Text { get; set; }
+        public object Image { get; set; }
+        [Required]
+        public string requiredCh { get; set; }
+        [Required]
+        public DateTime EndDate { get; set; }
+
     }
 }
