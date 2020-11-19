@@ -17,7 +17,7 @@ namespace Kursach.ModelViews
         public string[] Themes { get; set; }
         public string Tags { get; set; }
         public string Text { get; set; }
-        public object Image { get; set; }
+        public string Image { get; set; }
         [Required]
         public string requiredCh { get; set; }
         [Required]

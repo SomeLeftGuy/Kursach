@@ -14,7 +14,7 @@ namespace Kursach.Models
         public string createDate { get; set; }
         public string requiredCh { get; set; }
         public string endedCh { get; set; }
-        public object image { get; set; }
+        public string image { get; set; }
         public User user { get; set; }
     }
  
