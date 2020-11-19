@@ -27,7 +27,7 @@ namespace Kursach.Controllers
             {
                 user = user,
                 name = "Simple name",
-                createDate = DateTime.Now.ToString("MM/dd/yyyy"),
+                createDate = DateTime.Now.ToString("MM/dd/yy"),
                 endedCh = "0",
                 requiredCh = "0"
             });

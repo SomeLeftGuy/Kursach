@@ -31,9 +31,8 @@ namespace Kursach.Controllers
             HomeView[] refs;
             if (filter == null)
             {
-                refs = _db.Fanfics.Where(item =>item.endDate > DateTime.Now).Select(item => new HomeView
+                refs = _db.Fanfics.AsEnumerable().Where(item => Convert.ToDateTime(item.endDate) > DateTime.Now).Select(item => new HomeView
                 {
-                    
                     Ref = item.id,
                     EndDate = Convert.ToDateTime(item.endDate),
                     endedCh = item.endedCh,
@@ -63,10 +62,10 @@ namespace Kursach.Controllers
                     tags[i] = _db.Tag.FirstOrDefault(item => item.name == tagsString[i]);
                     if (tags[i] != null)
                     {
-                        fanfics.AddRange(_db.TagsToFanfics.Where(item => item.tag == tags[i] && item.Fanfic.endDate > DateTime.Now).Select(item => new HomeView
+                        fanfics.AddRange(_db.TagsToFanfics.AsEnumerable().Where(item => item.tag == tags[i] && Convert.ToDateTime(item.Fanfic.endDate) > DateTime.Now).Select(item => new HomeView
                         {
                             Ref = item.Fanfic.id,
-                            EndDate = Convert.ToDateTime(item.Fanfic.endDate),
+                            EndDate =Convert.ToDateTime(item.Fanfic.endDate),
                             endedCh = item.Fanfic.endedCh,
                             requiredCh = item.Fanfic.requiredCh,
                             Image = item.Fanfic.image,

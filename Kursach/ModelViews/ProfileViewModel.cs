@@ -18,7 +18,7 @@ namespace Kursach.ModelViews
         public int id { get; set; }
         public string name { get; set; }
         public string createDate { get; set; }
-        public DateTime endDate { get; set; }
+        public string endDate { get; set; }
         public string requiredCh { get; set; }
         public string endedCh { get; set; }
         public bool selected { get; set; }

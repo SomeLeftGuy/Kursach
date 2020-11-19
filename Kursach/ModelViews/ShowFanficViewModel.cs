@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
+using System.Drawing;
 
 namespace Kursach.ModelViews
 {
@@ -11,7 +13,7 @@ namespace Kursach.ModelViews
         public int Id { get; set; }
         public string Name { get; set; }
         public string Text { get; set; }
-        public object Image { get; set; }
+        public string Image { get; set; }
         public bool[] mark { get; set; }
         public double marks { get; set; }
         public string User { get; set; }
