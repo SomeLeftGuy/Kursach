@@ -12,10 +12,10 @@
         <div class="ml-3 text-left w-100">
             <h3>Name: @Model.Fanfics[i].Name</h3>
             <p>Rating: @Model.Fanfics[i].Rating</p>
-            <p class="mb-1">Required chapters: @Model.Fanfics[i].requiredCh$</p>
+            <p class="mb-1">Required chapters: @Model.Fanfics[i].requiredCh</p>
             @{ double precent = double.Parse(Model.Fanfics[i].endedCh) / double.Parse(Model.Fanfics[i].requiredCh) * 100;}
             <div class="progress mb-3" style="height: 20px">
-                <div class="progress-bar progress-bar-striped progress-bar-animated text-body font-weight-bold bg-warning" role="progressbar" aria-valuenow="@precent" aria-valuemin="0" aria-valuemax="100" style="width: @precent%">@Model.Fanfics[i].endedCh$</div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated text-body font-weight-bold bg-warning" role="progressbar" aria-valuenow="@precent" aria-valuemin="0" aria-valuemax="100" style="width: @precent%">@Model.Fanfics[i].endedCh</div>
             </div>
             @{int days = (Model.Fanfics[i].EndDate - DateTime.Now).Days + 1;}
             <p>End date: @Model.Fanfics[i].EndDate.ToString("MM/dd/yyyy"); Days to end: @days</p>

@@ -33,7 +33,6 @@ namespace Kursach.Controllers
             {
                 refs = _db.Fanfics.Where(item => item.endDate.Date > DateTime.Now.Date).Select(item => new HomeView
                 {
-                    
                     Ref = item.id,
                     EndDate = Convert.ToDateTime(item.endDate),
                     endedCh = item.endedCh,
@@ -96,7 +95,7 @@ namespace Kursach.Controllers
             }
             for (int i = 0; i < refs.Length; i++)
             {
-                int[] marks = _db.Marks.Where(item => item.companyId == refs[i].Ref).Select(item => item.value).ToArray();
+                int[] marks = _db.Marks.Where(item => item.fanficId == refs[i].Ref).Select(item => item.value).ToArray();
                 if (marks != null)
                 {
                     double rating = 0;

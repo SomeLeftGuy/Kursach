@@ -1,0 +1,112 @@
+﻿@model Kursach.ModelViews.ShowFanficViewModel;
+@{
+    ViewBag.Title = "Home Page";
+}
+<script>
+    let userName = "@User.Identity.Name";
+    let company = "@Model.Id";
+    let text = "@Model.".replace(/&#xD;&#xA;/g, "\n");
+</script>
+<div class="d-flex p-3 border align-items-center">
+    <img src="@Model.Image" width="350px" />
+    <div class="ml-3">
+        <h1>@Model.Name</h1>
+        <h5 class="text-muted">Creator: @Model.User</h5>
+        <h5 class="text-muted">Rating: @Model.marks</h5>
+        <form asp-action="SetMark" asp-controller="Fanfic" class="d-flex align-items-center" method="post">
+            <label class="m-0 mr-3">Estimate: </label>
+            @for (int i = 0; i < Model.mark.Length; i++)
+            {
+                string buf = "check" + i;
+                if (Model.mark[i])
+                {
+                    <label for="@buf"><img width="30px" class="star-img" src="~/img/star_t.png" /></label>
+                }
+                else
+                {
+                    <label for="@buf"><img width="30px" class="star-img" src="~/img/star_f.png" /></label>
+                }
+                <input id="@buf" asp-for="@Model.mark[i]" class="mark-check d-none mr-1" />
+            }
+            <input type="hidden" asp-for="@Model.Id" />
+            <button class="btn btn-default btn-primary p-1 ml-3" type="submit">Send</button>
+        </form>
+    </div>
+</div>
+<div class="d-flex p-3 border mt-3">
+    @{ bool ourFanfic = User.Identity.Name == Model.User; }
+    <a class="btn btn-default btn-primary mr-3" href="#" id="info">Info</a>
+    <a class="btn btn-default btn-primary mr-3" href="#" id="news">News</a>
+    @if (ourFanfic)
+    {
+        <a class="btn btn-default btn-primary mr-3" href="#" id="add-news">Add chapter</a>
+    }
+    <a class="btn btn-default btn-primary mr-3" href="#" id="comments">Comments</a>
+</div>
+<div class="main-section p-3 border mt-3 clearfix">
+   
+    <p style="white-space: pre-line" id="markdown-text"></p>
+</div>
+<div class="main-section p-3 border mt-3 clearfix d-none">
+    @for (int i = Model.chapters.Length - 1; i >= 0; i--)
+    {
+        <div class="p-3 border rounded dark mb-3">
+            @if (ourFanfic)
+            {
+                <form asp-controller="News" asp-action="DeleteNews" method="post">
+                    <input asp-for="deletechapterID" type="hidden" value="@Model.chapters[i].id">
+                    <input type="hidden" asp-for="Id" />
+                    <button class="btn btn-lg btn-primary mt-3 mb-3" type="submit">Delete</button>
+                </form>
+            }
+            <div class="d-flex align-items-center">
+                <h3>@Model.chapters[i].Name</h3>
+            </div>
+            <p style="white-space: pre-line" class="news-text">@Model.chapters[i].Text</p>
+        </div>
+    }
+</div>
+<div class="main-section p-3 border mt-3 clearfix d-none">
+    <div>
+        <textarea rows=3 id="comment" class="form-control mb-3" placeholder="Comment text"></textarea>
+        <button class="btn btn-default btn-primary mb-3" id="sendBtn">Send</button>
+    </div>
+    <div id="comments-list">
+        @for (int i = 0; i < Model.comments.Length; i++)
+        {
+            <div class="border rounded p-3 mb-3">
+                <h2 class="author">@Model.comments[i].Author</h2>
+                <p class="text-context">@Model.comments[i].Text</p>
+                <span>Rating: </span>
+                <span class="rating">@Model.comments[i].Rating</span>
+                <a class="like ml-3"><img src="~/img/like.png" width="18" /></a>
+                <a class="dislike ml-3"><img src="~/img/dislike.png" width="18" /></a>
+                <input type="hidden" class="comment-id" value="@Model.comments[i].id" />
+            </div>
+        }
+    </div>
+</div>
+
+<div class="main-section p-3 border mt-3 clearfix d-none">
+    <form asp-controller="News" asp-action="AddNews" method="post">
+        <label asp-for="addChapter.Name" class="text-muted mt-3"></label>
+        <input asp-for="addChapter.Name" class="form-control col-md-6" placeholder="Name">
+        <span asp-validation-for="addChapter.Name" class="d-block"></span>
+        <label asp-for="addChapter.Text" class="text-muted mt-3"></label>
+        <textarea rows=15 asp-for="addChapter.Text" class="form-control" placeholder="Text"></textarea>
+        <span asp-validation-for="addChapter.Text" class="d-block"></span>
+
+        <a class="btn btn-default btn-primary mb-3 mt-3" onclick="document.querySelector('.image-loader').click()" href="#">Load image</a>
+        <input class="image-loader" style="visibility: collapse; width: 0px;" type="file" onchange="upload(this.files[0])">
+        <img class="company-image d-block" style="max-width: 300px; max-height: 150px;" src="@Model.addChapter.Image" />
+
+        <input type="hidden" asp-for="Id" />
+        <input id="company-image" asp-for="addChapter.Image" hidden />
+
+        <button class="btn btn-lg btn-primary btn-block mt-3 mb-3" type="submit">Add</button>
+    </form>
+</div>
+<script src="~/js/markdown.js"></script>
+<script src="~/js/signalr.min.js"></script>
+<script src="~/js/CommentHub.js" defer></script>
+<script src="~/js/ShowCompany.js" defer></script>

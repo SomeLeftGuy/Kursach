@@ -16,7 +16,9 @@ namespace Kursach.ModelViews
         public double marks { get; set; }
         public string User { get; set; }
         public CommentsView[] comments { get; set; }
-
+        public ChapterView[] chapters { get; set; }
+        public int deletechapterID { get; set; }
+        public ChapterView addChapter { get; set; }
     }
 
     public class CommentsView
@@ -25,6 +27,13 @@ namespace Kursach.ModelViews
         public string Author { get; set; }
         public string Text { get; set; }
         public int Rating { get; set; }
+    }
+    public class ChapterView
+    {
+        public int id { get; set; }
+        public string Name { get; set; }
+        public string Text { get; set; }
+        public string Image { get; set; }
     }
 }
 

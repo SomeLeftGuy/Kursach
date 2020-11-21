@@ -1,0 +1,90 @@
+﻿@model Kursach.ModelViews.FanficViewModel;
+
+@{
+    ViewBag.Title = "Edit fanfic";
+}
+
+
+<div class="validation" asp-validation-summary="ModelOnly"></div>
+<form name="EditCompany" class="" method="post" asp-controller="Fanfic" asp-action="EditFanfic">
+    <h1 class="h3 mb-3 font-weight-normal">Edit company: @Model.FanficName</h1>
+
+    <label asp-for="FanficName" class="text-muted mt-3"></label>
+    <input asp-for="FanficName" class="form-control col-md-6" placeholder="Name">
+    <span asp-validation-for="FanficName" class="d-block"></span>
+
+    <label asp-for="Text" class="text-muted mt-3"></label>
+    <textarea rows=15 asp-for="Text" class="form-control" placeholder="Description"></textarea>
+    <span asp-validation-for="Text" class="d-block"></span>
+
+    <label asp-for="requiredCh" class="text-muted mt-3"></label>
+    <input type="number" asp-for="requiredCh" class="form-control col-md-6" placeholder="Sum">
+    <span asp-validation-for="requiredCh" class="d-block"></span>
+
+    <label asp-for="EndDate" class="text-muted mt-3"></label>
+    <input type="date" asp-for="EndDate" class="form-control col-md-6" placeholder="End date">
+    <span asp-validation-for="EndDate" class="d-block"></span>
+
+    <label asp-for="Tags" class="text-muted mt-3"></label>
+    <input asp-for="Tags" class="form-control col-md-6" placeholder="Tags">
+    <span asp-validation-for="Tags" class="d-block"></span>
+
+    <a class="btn btn-default btn-primary mb-3" onclick="document.querySelector('.image-loader').click()" href="#">Load image</a>
+    <input class="image-loader" style="visibility: collapse; width: 0px;" type="file" onchange="upload(this.files[0])">
+    <img class="company-image d-block" style="max-width: 300px; max-height: 150px;" src="@Model.Image" />
+
+    <input asp-for="id" hidden />
+    <input id="company-image" asp-for="Image" hidden />
+    <button class="btn btn-lg btn-primary btn-block mt-3 mb-3" type="submit">Save</button>
+</form>
+
+
+<script>
+    let inputTag = document.getElementById("tag");
+    function GetTags() {
+        let elements = document.querySelectorAll('ul > li');
+        elements.forEach(item => {
+            item.remove();
+        });
+        let arr = inputTag.value.split(' ');
+        for (let i = 0; i < arr.length; i++) {
+            if (arr[i].trim() !== '') {
+                let CompanyKeywordsList = document.getElementById("company-keywords-list");
+                let li = document.createElement('LI');
+                li.innerHTML = arr[i];
+                CompanyKeywordsList.appendChild(li);
+            }
+        }
+    }
+
+    window.ondragover = function (e) { e.preventDefault() }
+    window.ondrop = function (e) { e.preventDefault(); upload(e.dataTransfer.files[0]); }
+    function upload(file) {
+
+        if (!file || !file.type.match(/image.*/)) return;
+
+        let spanUploading = document.createElement('div');
+        spanUploading.classList.add("fixed-bottom");
+        spanUploading.innerHTML = "Uploading";
+        document.body.appendChild(spanUploading);
+
+
+
+        var fd = new FormData();
+        fd.append("image", file);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "https://api.imgur.com/3/image.json");
+        xhr.onload = function () {
+            let linkImage = JSON.parse(xhr.responseText).data.link;
+            document.querySelector('.company-image').src = linkImage;
+
+            document.getElementById("company-image").setAttribute('value', linkImage);
+
+            spanUploading.innerHTML = "uploaded";
+        }
+
+        xhr.setRequestHeader('Authorization', 'Client-ID 28aaa2e823b03b1');
+
+        xhr.send(fd);
+    }
+</script>

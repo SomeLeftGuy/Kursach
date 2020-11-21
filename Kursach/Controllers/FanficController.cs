@@ -27,7 +27,7 @@ namespace Kursach.Controllers
             {
                 user = user,
                 name = "Simple name",
-                createDate = DateTime.Now.ToString("MM/dd/yyyy"),
+                createDate = DateTime.Now,
                 endedCh = "0",
                 requiredCh = "0"
             });
@@ -113,7 +113,7 @@ namespace Kursach.Controllers
             await _db.SaveChangesAsync();
             return RedirectToAction("Index", "Profile");
         }
-        [Route("Company/{id:int}")]
+        [Route("Fanfic/{id:int}")]
         public async Task<IActionResult> Index(int id)
         {
             Fanfic fanfic = _db.Fanfics.FirstOrDefault(item => item.id == id);
@@ -151,11 +151,8 @@ namespace Kursach.Controllers
                     }
                 }
                 string userName = _userManager.Users.FirstOrDefault(item => item.Id == fanfic.userId).UserName;
-
-
                 CommentsView[] comments = _db.Comments.Where(item => item.fanfic == fanfic)
                     .Select(item => new CommentsView { id = item.id, Author = item.user.UserName, Text = item.text, Rating = 0 }).ToArray();
-
                 for (int i = 0; i < comments.Length; i++)
                 {
                     foreach (bool rating in _db.Ratings.Where(item => item.commentId == comments[i].id).Select(item => item.value))
@@ -166,7 +163,6 @@ namespace Kursach.Controllers
                             comments[i].Rating--;
                     }
                 }
-
                 return View(new ShowFanficViewModel
                 {
                     Id = fanfic.id,

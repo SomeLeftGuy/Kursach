@@ -125,20 +125,12 @@ namespace Kursach.Controllers
                 .Select(item => new FanficView
                 {
                     name = item.name,
-                    endDate = item.endDate,
+                    endDate = item.endDate.Date,
                     requiredCh = item.requiredCh,
                     id = item.id,
                     endedCh = item.endedCh,
                     createDate = item.createDate
                 }).ToArray();
-            // [] bonusView = _db.BonusesToUsers.Where(item => item.user == user)
-            //       .Select(item => new BonusView
-            //  {
-            //       id = item.bonus.id,
-            //       Name = item.bonus.name,
-            //        Description = item.bonus.description
-            //    }).ToArray();
-            // model.bonuses = bonusView;
             return View(model);
         }
         [HttpPost]
