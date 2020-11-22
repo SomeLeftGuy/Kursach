@@ -18,15 +18,15 @@ namespace Kursach.Controllers
         {
             _db = context;
         }
-        public async Task Send(string message, string userName, string company)
+        public async Task Send(string message, string userName, string fanfic)
         {
             User user = _db.Users.FirstOrDefault(item => item.UserName == userName);
-            Comment comment = _db.Comments.FirstOrDefault(item => item.companyId + "" == company && item.user == user);
+            Comment comment = _db.Comments.FirstOrDefault(item => item.fanficId + "" == fanfic && item.user == user);
             if (comment == null)
             {
                 if (message != "")
                 {
-                    _db.Comments.Add(new Comment { user = user, companyId = Convert.ToInt32(company), text = message });
+                    _db.Comments.Add(new Comment { user = user, fanficId = Convert.ToInt32(fanfic), text = message });
                     _db.SaveChanges();
                 }
             }
@@ -44,7 +44,7 @@ namespace Kursach.Controllers
                     _db.SaveChanges();
                 }
             }
-            comment = _db.Comments.FirstOrDefault(item => item.companyId + "" == company && item.user == user);
+            comment = _db.Comments.FirstOrDefault(item => item.fanficId + "" == fanfic && item.user == user);
             if (comment != null)
                 await Clients.All.SendAsync("Send", message, userName, comment.id);
             else
