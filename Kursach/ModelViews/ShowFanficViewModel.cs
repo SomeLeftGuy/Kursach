@@ -12,11 +12,10 @@ namespace Kursach.ModelViews
         public string Name { get; set; }
         public string Text { get; set; }
         public object Image { get; set; }
-        public bool[] mark { get; set; }
-        public double marks { get; set; }
         public string User { get; set; }
         public CommentsView[] comments { get; set; }
         public ChaptersView[] Chapters { get; set; }
+        
         public int deletechapterID { get; set; }
         public ChaptersView addChapter { get; set; }
     }
