@@ -7,10 +7,9 @@ namespace Kursach.Models
     {
         public DbSet<Fanfic> Fanfics { get; set; }
         public DbSet<Comment> Comments { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
         public DbSet<Tag> Tag { get; set; }
         public  DbSet<TagsToFanfics> TagsToFanfics { get; set; }
-        public DbSet<Mark> Marks { get; set; }
+        public DbSet<Chapters> Chapters { get; set; }
         public ApplicationContext(DbContextOptions<ApplicationContext> options)
           : base(options)
         {

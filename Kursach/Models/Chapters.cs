@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace Kursach.Models
 {
-    public class Mark
+    public class Chapters
     {
         public int id { get; set; }
-        public int value { get; set; }
-        public int userId { get; set; }
-        public User user { get; set; }
+        public string name { get; set; }
+        public string text { get; set; }
+        public string image { get; set; }
         public int fanficId { get; set; }
         public Fanfic fanfic { get; set; }
     }

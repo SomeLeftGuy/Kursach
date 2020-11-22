@@ -50,38 +50,5 @@ namespace Kursach.Controllers
             else
                 await Clients.All.SendAsync("Send", message, userName, 0);
         }
-        public async Task Rating(string userName, bool value, string commentId)
-        {
-            int changeValue = 0;
-            Comment comment = _db.Comments.FirstOrDefault(item => item.id + "" == commentId);
-            User user = _db.Users.FirstOrDefault(item => item.UserName == userName);
-            Rating rating = _db.Ratings.FirstOrDefault(item => item.comment == comment && item.user == user);
-            if (rating == null)
-            {
-                _db.Ratings.Add(new Rating { user = user, comment = comment, value = value });
-                _db.SaveChanges();
-                if (value) changeValue = 1;
-                else changeValue = -1;
-            }
-            else
-            {
-                if (rating.value == value)
-                {
-                    _db.Ratings.Remove(rating);
-                    _db.SaveChanges();
-                    if (value) changeValue = -1;
-                    else changeValue = 1;
-                }
-                else
-                {
-                    rating.value = value;
-                    _db.Ratings.Update(rating);
-                    _db.SaveChanges();
-                    if (value) changeValue = 2;
-                    else changeValue = -2;
-                }
-            }
-            await Clients.All.SendAsync("Rating", commentId, changeValue);
-        }
     }
 }

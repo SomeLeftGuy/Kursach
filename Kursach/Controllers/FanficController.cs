@@ -120,95 +120,26 @@ namespace Kursach.Controllers
             if (fanfic != null)
             {
                 User user = await _userManager.GetUserAsync(User);
-                Mark mark = _db.Marks.FirstOrDefault(item => item.fanfic == fanfic && item.user == user);
-                int[] marksAll = _db.Marks.Where(item => item.fanfic == fanfic).Select(item => item.value).ToArray();
-                double marksRes = 0;
-                if (marksAll.Length > 0)
-                {
-                    for (int i = 0; i < marksAll.Length; i++)
-                    {
-                        marksRes += marksAll[i] + 1;
-                    }
-                    marksRes /= marksAll.Length;
-                }
-                marksRes = Math.Round(marksRes, 2);
-                bool[] marks = new bool[5];
-                if (mark != null)
-                {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        if (i <= mark.value)
-                            marks[i] = true;
-                        else
-                            marks[i] = false;
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < 5; i++)
-                    {
-                        marks[i] = false;
-                    }
-                }
                 string userName = _userManager.Users.FirstOrDefault(item => item.Id == fanfic.userId).UserName;
+                ChaptersView[] chapters = _db.Chapters.Where(item => item.fanfic == fanfic)
+                   .Select(item => new ChaptersView { Name = item.name, Text = item.text, Image = item.image, id = item.id }).ToArray();
                 CommentsView[] comments = _db.Comments.Where(item => item.fanfic == fanfic)
-                    .Select(item => new CommentsView { id = item.id, Author = item.user.UserName, Text = item.text, Rating = 0 }).ToArray();
-                for (int i = 0; i < comments.Length; i++)
-                {
-                    foreach (bool rating in _db.Ratings.Where(item => item.commentId == comments[i].id).Select(item => item.value))
-                    {
-                        if (rating)
-                            comments[i].Rating++;
-                        else
-                            comments[i].Rating--;
-                    }
-                }
+                    .Select(item => new CommentsView { id = item.id, Author = item.user.UserName, Text = item.text}).ToArray();
+
                 return View(new ShowFanficViewModel
                 {
                     Id = fanfic.id,
                     Name = fanfic.name,
                     Image = fanfic.image,
                     Text = fanfic.text,
-                    mark = marks,
-                    marks = marksRes,
                     User = userName,
                     comments = comments,
+                    Chapters = chapters,
+                    addChapter = new ChaptersView()
                 });
 
             }
             else return View("NotFound");
-        }
-        [HttpPost]
-        public async Task<IActionResult> SetMark(ShowFanficViewModel model)
-        {
-            User user = await _userManager.GetUserAsync(User);
-            Fanfic fanfic = _db.Fanfics.FirstOrDefault(item => item.id == model.Id);
-            Mark mark = _db.Marks.FirstOrDefault(item => item.fanfic == fanfic && item.user == user);
-            for (int i = 4; i >= 0; i--)
-            {
-                if (model.mark[i] == true)
-                {
-                    if (mark == null)
-                    {
-                        _db.Marks.Add(new Mark { fanfic = fanfic, user = user, value = i });
-                        await _db.SaveChangesAsync();
-                        return RedirectToAction(model.Id + "", "Fanfic");
-                    }
-                    else
-                    {
-                        mark.value = i;
-                        _db.Marks.Update(mark);
-                        await _db.SaveChangesAsync();
-                        return RedirectToAction(model.Id + "", "Fanfic");
-                    }
-                }
-            }
-            if (mark != null)
-            {
-                _db.Marks.Remove(mark);
-                await _db.SaveChangesAsync();
-            }
-            return RedirectToAction(model.Id + "", "Fanfic");
         }
     }
 }
