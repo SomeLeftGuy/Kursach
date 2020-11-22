@@ -10,7 +10,7 @@ namespace Kursach.Models
         public int id { get; set; }
         public int tagId { get; set; }
         public Tag tag { get; set; }
-        public int companyId { get; set; }
+        public int fanficId { get; set; }
         public Fanfic Fanfic { get; set; }
     }
 }

@@ -33,7 +33,6 @@ namespace Kursach.Controllers
             {
                 refs = _db.Fanfics.Where(item => item.endDate.Date > DateTime.Now.Date).Select(item => new HomeView
                 {
-                    
                     Ref = item.id,
                     EndDate = Convert.ToDateTime(item.endDate),
                     endedCh = item.endedCh,
@@ -71,7 +70,7 @@ namespace Kursach.Controllers
                             requiredCh = item.Fanfic.requiredCh,
                             Image = item.Fanfic.image,
                             Name = item.Fanfic.name,
-                            Rating = 0
+                            
                         }));
                     }
                 }
@@ -94,40 +93,7 @@ namespace Kursach.Controllers
                 }
                 refs = result.ToArray();
             }
-            for (int i = 0; i < refs.Length; i++)
-            {
-                int[] marks = _db.Marks.Where(item => item.companyId == refs[i].Ref).Select(item => item.value).ToArray();
-                if (marks != null)
-                {
-                    double rating = 0;
-                    double fullRaiting = marks.Length;
-                    for (int j = 0; j < marks.Length; j++)
-                    {
-                        rating += marks[j] + 1;
-                    }
-                    rating /= marks.Length;
-                    fullRaiting *= rating;
-                    refs[i].Rating = Math.Round(rating, 2);
-                    refs[i].FullRating = fullRaiting;
-                }
-                else
-                {
-                    refs[i].FullRating = 0;
-                    refs[i].Rating = 0;
-                }
-            }
-            for (int i = 0; i < refs.Length - 1; i++)
-            {
-                for (int j = i + 1; j < refs.Length; j++)
-                {
-                    if (refs[i].FullRating < refs[j].FullRating)
-                    {
-                        HomeView buf = refs[i];
-                        refs[i] = refs[j];
-                        refs[j] = buf;
-                    }
-                }
-            }
+         
             return View(new HomeViewModel { Fanfics = refs });
         }
     }

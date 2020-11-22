@@ -11,7 +11,7 @@ namespace Kursach.Models
         public string text { get; set; }
         public string userId { get; set; }
         public User user { get; set; }
-        public int companyId { get; set; }
+        public int fanficId { get; set; }
         public Fanfic fanfic { get; set; }
     }
 }

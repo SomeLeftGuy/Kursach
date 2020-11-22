@@ -14,8 +14,6 @@ public class HomeView
     public int Ref { get; set; }
     public string Name { get; set; }
     public object Image { get; set; }
-    public double Rating { get; set; }
-    public double FullRating { get; set; }
     public DateTime EndDate { get; set; }
     public string requiredCh { get; set; }
     public string endedCh { get; set; }
