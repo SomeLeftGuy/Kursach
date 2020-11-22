@@ -1,5 +1,5 @@
 ﻿document.getElementById("markdown-text").innerHTML = markdown.toHTML(text);
-let markChecks = document.querySelectorAll(".mark-check");
+//let markChecks = document.querySelectorAll(".mark-check");
 let chapterText = document.querySelectorAll(".chapter-text");
 for (let i = 0; i < chapterText.length; i++) {
     let buf = chapterText[i].textContent;
@@ -9,11 +9,9 @@ for (let i = 0; i < chapterText.length; i++) {
 let starChecks = document.querySelectorAll(".star-img");
 let info = document.querySelectorAll(".main-section");
 let select = 0;
-
 document.getElementById("info").addEventListener("click", function () { SwitchSection(0); });
 document.getElementById("chapter").addEventListener("click", function () { SwitchSection(1); });
-document.getElementById("comments").addEventListener("click", function () { SwitchSection(3); });
-
+document.getElementById("comments").addEventListener("click", function () { SwitchSection(2); });
 function SwitchSection(num) {
     if (info[num].classList.contains("d-none")) {
         info[num].classList.remove("d-none");
@@ -50,7 +48,7 @@ function upload(file) {
         spanUploading.innerHTML = "Uploaded";
     }
 
-    xhr.setRequestHeader('Authorization', 'Client-ID 28aaa2e823b03b1');
+    xhr.setRequestHeader('Authorization', 'Client-ID ');
 
     xhr.send(fd);
 }

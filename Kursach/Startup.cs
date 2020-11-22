@@ -25,17 +25,6 @@ namespace Kursach
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddAuthentication()
-            // .AddFacebook(facebookOptions =>
-            //{
-            //facebookOptions.AppId = "383083749274356";
-            //  facebookOptions.AppSecret = "0336b92886a9c424ba8be4ee6107373c";
-            // })
-            //.AddMicrosoftAccount(microsoftOptions =>
-            //  {
-            //    microsoftOptions.ClientId = "75f77783-3fd8-4ee7-a778-6dff6a86a966";
-            //  microsoftOptions.ClientSecret = "V5UxIPjpJZPbs9A2Ytt0FRmi.DXvX@:@";
-            // });
             services.AddControllersWithViews(mvcOtions =>
             {
                 mvcOtions.EnableEndpointRouting = false;
